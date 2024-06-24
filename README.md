@@ -22,9 +22,9 @@ https://github.com/nbusseneau/InstantFertilizer/assets/4659919/08ef5ded-b1bb-41f
 To achieve that, the default configuration aims to give a purpose to niche items with little use in vanilla by:
 
 - Adding a new resource sink for **Ancient Seeds**, offering:
-  - An interesting choice in early game as you have to choose between using your first few **Ancient Seeds** to set up your first **Carrot** farm or stocking up to summon The Elder.
+  - An interesting choice in early game between using your first few **Ancient Seeds** to set up your first **Carrot** farm or stocking up to summon The Elder.
   - An incentive in mid game / early late game to keep farming **Ancient Seeds** to set up your first **Turnip** or **Onion** farms.
-- Adding a new resource sink for **Coins** via **Ymir Flesh**, offering an interesting choice in mid game / early late game between spending your **Coins** on fertilizers or stocking up to buy expensive **Eggs**..
+- Adding a new resource sink for **Coins** via **Ymir Flesh**, offering an interesting choice in mid game / early late game between spending your **Coins** on fertilizers or stocking up to buy expensive **Eggs**.
 
 ## Compatibility
 
