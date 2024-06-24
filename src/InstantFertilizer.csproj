@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>0.0.1</Version>
+    <TargetFramework>net481</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <R2ModManProfile>Dev_InstantFertilizer</R2ModManProfile>
+  </PropertyGroup>
+
+  <!-- Valheim paths -->
+  <Choose>
+    <When Condition="($(OS) == 'Unix' OR $(OS) == 'OSX') AND $(GamePath) == ''">
+      <PropertyGroup>
+        <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.steam/steam/steamapps/common/Valheim</GamePath>
+        <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/Library/Application Support/Steam/steamapps/common/Valheim/Contents/MacOS</GamePath>
+      </PropertyGroup>
+    </When>
+    <When Condition="($(OS) == 'Windows_NT') AND $(GamePath) == ''">
+      <PropertyGroup>
+        <GamePath Condition="!Exists('$(GamePath)')">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 892970', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</GamePath>
+        <_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
+        <GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)\steamapps\common\Valheim</GamePath>
+        <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\Valheim</GamePath>
+        <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  <PropertyGroup>
+    <ManagedPath Condition="!Exists('$(ManagedPath)') AND Exists('$(GamePath)')">$(GamePath)\valheim_Data\Managed</ManagedPath>
+    <PublicizedPath Condition="!Exists('$(PublicizedPath)') AND Exists('$(ManagedPath)')">$(ManagedPath)\publicized_assemblies</PublicizedPath>
+  </PropertyGroup>
+
+  <!-- BepInEx paths -->
+  <PropertyGroup>
+    <BepInExPath Condition="!Exists('$(BepInExPath)') AND ($(OS) == 'Windows_NT')">$(AppData)\r2modmanPlus-local\Valheim\profiles\$(R2ModManProfile)\BepInEx</BepInExPath>
+    <BepInExPath Condition="!Exists('$(BepInExPath)') AND Exists('$(GamePath)')">$(GamePath)\BepInEx</BepInExPath>
+    <PluginsPath>$(BepInExPath)\plugins</PluginsPath>
+  </PropertyGroup>
+
+  <!-- Jotunn paths -->
+  <PropertyGroup>
+    <VALHEIM_INSTALL>$(GamePath)</VALHEIM_INSTALL>
+    <BEPINEX_PATH>$(BepInExPath)</BEPINEX_PATH>
+    <ExecutePrebuild>true</ExecutePrebuild>
+  </PropertyGroup>
+
+  <!-- Packages -->
+  <ItemGroup>
+    <PackageReference Include="JotunnLib" Version="2.20.1" />
+  </ItemGroup>
+
+  <!-- Translations -->
+  <ItemGroup>
+    <Translations Include="Translations\**" />
+  </ItemGroup>
+
+  <!-- Clean BepInEx plugins after clean -->
+  <Target Name="CleanPlugins" AfterTargets="Clean">
+    <RemoveDir Directories="$(PluginsPath)\$(MSBuildProjectName)" />
+    <Message Importance="High" Text="Removed $(PluginsPath)\$(MSBuildProjectName)" />
+  </Target>
+
+  <!-- Copy to BepInEx plugins after build -->
+  <Target Name="CopyToPlugins" AfterTargets="AfterBuild">
+    <CallTarget Targets="CleanPlugins" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PluginsPath)\$(MSBuildProjectName)" />
+    <Message Importance="High" Text="Copied $(TargetFileName) to $(PluginsPath)\$(MSBuildProjectName)" />
+    <Copy SourceFiles="@(Translations)" DestinationFolder="$(PluginsPath)\$(MSBuildProjectName)\Translations\%(RecursiveDir)" />
+    <Message Importance="High" Text="Copied Translations to $(PluginsPath)\$(MSBuildProjectName)\Translations" />
+  </Target>
+</Project>

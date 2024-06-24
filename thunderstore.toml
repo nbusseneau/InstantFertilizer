@@ -1,0 +1,41 @@
+[config]
+schemaVersion = "0.0.1"
+
+
+[package]
+namespace = "nbusseneau"
+name = "Instant_Fertilizer"
+versionNumber = "0.0.1"
+description = "Allows to fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to grow / respawn them instantaneously. Configurable fertilizer list (default: 3 Ancient Seeds or 1 Ymir Flesh), enforceable server-side. Translations available."
+websiteUrl = "https://github.com/nbusseneau/InstantFertilizer"
+containsNsfwContent = false
+
+[package.dependencies]
+denikson-BepInExPack_Valheim = "5.4.2202"
+ValheimModding-Jotunn = "2.20.1"
+
+
+[build]
+icon = "./icon.png"
+readme = "./README.md"
+outdir = "./build"
+
+[[build.copy]]
+source = "./CHANGELOG.md"
+target = "./CHANGELOG.md"
+
+[[build.copy]]
+source = "./src/bin/Release/InstantFertilizer.dll"
+target = "./plugins/InstantFertilizer.dll"
+
+[[build.copy]]
+source = "./src/Translations"
+target = "./plugins/Translations"
+
+
+[publish]
+repository = "https://thunderstore.io"
+communities = [ "valheim", ]
+
+[publish.categories]
+valheim = [ "client-side", "server-side", "mods", "tweaks", "utility", "ashlands-update", ]

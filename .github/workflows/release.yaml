@@ -1,0 +1,98 @@
+name: Release
+run-name: Release ${{ inputs.tag }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag / Version number"
+        required: true
+
+permissions:
+  contents: write # required for pushing to the repository and creating releases
+
+env:
+  python-version: "3.12"
+  changelog: CHANGELOG.md
+  readme: README.md
+  thunderstore-config: thunderstore.toml
+  project: src/*.csproj
+  plugin: src/Plugin.cs
+
+jobs:
+  release:
+    name: Release ${{ inputs.tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check input tag format
+        run: |
+          if ! echo "${{ inputs.tag }}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error title=Invalid package version number::Version numbers must follow the Major.Minor.Patch format (e.g. 1.45.320)."
+            exit 1
+          fi
+
+      - name: Checkout files
+        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
+        with:
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        with:
+          python-version: ${{ env.python-version }}
+
+      - name: Build release notes
+        shell: python
+        run: |
+          import os
+          from pathlib import Path
+          import re
+
+          regex = re.compile(r'## \[Unreleased\]\s+(?P<notes>.*?)\s+## ', re.DOTALL)
+          changelog = Path('${{ env.changelog }}').read_text()
+          found = regex.search(changelog)
+
+          def set_env(name, value):
+              with open(os.environ['GITHUB_ENV'], 'a') as f:
+                  delimiter = "EOF"
+                  print(f'{name}<<{delimiter}', file=f)
+                  print(value, file=f)
+                  print(delimiter, file=f)
+
+          if found:
+            notes = found.group('notes')
+            set_env("release-notes", notes)
+
+      - name: Rotate unreleased section in changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@77ac767b2f7f6edf2ee72ab3364ed26667086f96
+        with:
+          tag: ${{ inputs.tag }}
+
+      - name: Rotate version
+        run: |
+          NAMESPACE=$(perl -ne 'print $1 and last if /namespace = "(.*)"/' thunderstore.toml)
+          NAME=$(perl -ne 'print $1 and last if /name = "(.*)"/' thunderstore.toml)
+          sed -i "s/${NAMESPACE}-${NAME}-[0-9]\+.[0-9]\+.[0-9]\+.zip/${NAMESPACE}-${NAME}-${{ inputs.tag }}.zip/g" ${{ env.readme }}
+          sed -i 's/versionNumber = ".*"/versionNumber = "${{ inputs.tag }}"/' ${{ env.thunderstore-config }}
+          sed -i 's;<Version>.*</Version>;<Version>${{ inputs.tag }}</Version>;' ${{ env.project }}
+          sed -i 's/ModVersion = ".*"/ModVersion = "${{ inputs.tag }}"/' ${{ env.plugin }}
+
+      - name: Push updated files to repository
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ${{ env.changelog }} ${{ env.readme }} ${{ env.thunderstore-config }} ${{ env.project }} ${{ env.plugin }}
+          git commit --message "Release ${{ inputs.tag }}"
+          git tag ${{ inputs.tag }} --annotate --message "Release ${{ inputs.tag }}"
+          git push origin HEAD:${{ github.ref_name }} --tags
+
+      - name: Create release
+        id: release
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
+        with:
+          release_name: ${{ inputs.tag }}
+          tag_name: ${{ inputs.tag }}
+          body: ${{ env.release-notes }}
+          commitish: ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
