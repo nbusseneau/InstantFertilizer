@@ -4,6 +4,10 @@
 Configurable fertilizer list (default: **3 Ancient Seeds** or **1 Ymir Flesh**), enforceable server-side.
 Translations available.
 
+## Video showcase
+
+https://github.com/nbusseneau/InstantFertilizer/assets/4659919/08ef5ded-b1bb-41f7-abd7-689072d7b3f3
+
 ## Features
 
 - Fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to make them grow or respawn instantaneously, using items from a configurable fertilizer list.
