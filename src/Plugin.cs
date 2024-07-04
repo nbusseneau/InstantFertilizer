@@ -18,7 +18,7 @@ public class Plugin : BaseUnityPlugin
 {
   internal const string ModGUID = "nbusseneau.InstantFertilizer";
   private const string ModName = "InstantFertilizer";
-  private const string ModVersion = "0.1.1";
+  private const string ModVersion = "0.2.0";
 
   internal static new ManualLogSource Logger { get; private set; }
 
