@@ -1,4 +1,4 @@
-# Instant Fertilizer™️
+# Instant Fertilizer™
 
 [Valheim](https://store.steampowered.com/app/892970/Valheim/) mod that allows to fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to grow / respawn them instantaneously.
 Configurable fertilizer list (default: **3 Ancient Seeds** or **1 Ymir Flesh**), enforceable server-side.
@@ -17,7 +17,7 @@ https://github.com/nbusseneau/InstantFertilizer/assets/4659919/08ef5ded-b1bb-41f
 
 ## But why?
 
-**Instant Fertilizer™️** aims to address the annoyances around initially setting up a farm: the first few **Carrot seeds**, **Turnip seeds**, and **Onion seeds** you find in the wild can be quickly cycled with fertilizers in order to speed up getting to a sustainable state.
+**Instant Fertilizer™** aims to address the annoyances around initially setting up a farm: the first few **Carrot seeds**, **Turnip seeds**, and **Onion seeds** you find in the wild can be quickly cycled with fertilizers in order to speed up getting to a sustainable state.
 
 To achieve that, the default configuration aims to give a purpose to niche items with little use in vanilla by:
 
@@ -30,18 +30,18 @@ To achieve that, the default configuration aims to give a purpose to niche items
 
 ### With vanilla clients / clients not using the mod
 
-**Plants** and **pickables** are managed by the current zone owner (usually the first person to enter a zone), however **Instant Fertilizer™️** claims ownership of any plant or pickable on fertilizing.
+**Plants** and **pickables** are managed by the current zone owner (usually the first person to enter a zone), however **Instant Fertilizer™** claims ownership of any plant or pickable on fertilizing.
 It should thus work transparently with all clients, regardless of if they use the mod or not: the fertilized plant or pickable will grow or respawn instantaneously from their point of view as well (which might make you look suspicious if they're unaware).
 
 ### With other mods
 
-**Instant Fertilizer™️** hooks onto the `Pickable` and `Plant` components and should work transparently with all mods, including those that add new **plants** or **pickables**.
-In particular, **Instant Fertilizer™️** is explicitly made to be compatible with [PlantEverything](https://thunderstore.io/c/valheim/p/Advize/PlantEverything/).
+**Instant Fertilizer™** hooks onto the `Pickable` and `Plant` components and should work transparently with all mods, including those that add new **plants** or **pickables**.
+In particular, **Instant Fertilizer™** is explicitly made to be compatible with [PlantEverything](https://thunderstore.io/c/valheim/p/Advize/PlantEverything/).
 Feel free to [report any issue you find](https://github.com/nbusseneau/InstantFertilizer/issues/new).
 
 ### Translations
 
-**Instant Fertilizer™️** comes with the following languages available out of the box:
+**Instant Fertilizer™** comes with the following languages available out of the box:
 
 - English
 - French
@@ -54,7 +54,7 @@ To add a new language as a user:
 - Make a copy of the `English/` directory, then rename it to the appropriate name for your language (see [valid folder names](https://valheim-modding.github.io/Jotunn/data/localization/language-list.html)).
 - Edit `<your_language_name>/InstantFertilizer.json` as appropriate using a text editor.
 
-If you localize **Instant Fertilizer™️** for your own language, you are most welcome to [send your translation file my way](https://github.com/nbusseneau/InstantFertilizer/issues/new), and I will integrate it as part of the languages available by default.
+If you localize **Instant Fertilizer™** for your own language, you are most welcome to [send your translation file my way](https://github.com/nbusseneau/InstantFertilizer/issues/new), and I will integrate it as part of the languages available by default.
 
 ## Install
 
@@ -92,5 +92,5 @@ In other words:
 
 ## Special thanks
 
-**Instant Fertilizer™️** is a reimplementation of a mod initially created by [warpalicious](https://thunderstore.io/c/valheim/p/warpalicious/).
+**Instant Fertilizer™** is a reimplementation of a mod initially created by [warpalicious](https://thunderstore.io/c/valheim/p/warpalicious/).
 Check out their POI content mods, you won't regret it 👍
