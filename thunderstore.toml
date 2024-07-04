@@ -6,7 +6,7 @@ schemaVersion = "0.0.1"
 namespace = "nbusseneau"
 name = "Instant_Fertilizer"
 versionNumber = "0.1.1"
-description = "Allows to fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to grow / respawn them instantaneously. Configurable fertilizer list (default: 3 Ancient Seeds or 1 Ymir Flesh), enforceable server-side. Translations available."
+description = "Allows to fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to grow / respawn them instantaneously. Configurable fertilizer list and growing / respawning time reduction, enforceable server-side. Translations available."
 websiteUrl = "https://github.com/nbusseneau/InstantFertilizer"
 containsNsfwContent = false
 

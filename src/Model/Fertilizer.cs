@@ -5,7 +5,6 @@ public class Fertilizer(string itemName, int requiredAmount, string requiredGlob
   public string ItemName { get; } = itemName;
   public int RequiredAmount { get; } = requiredAmount;
   public string RequiredGlobalKey { get; } = requiredGlobalKey;
-  public string HoverText { get; } = $"{requiredAmount} {itemName}";
 
   public override string ToString() => $"{this.ItemName}{Delimiter}{this.RequiredAmount}{Delimiter}{this.RequiredGlobalKey}";
 

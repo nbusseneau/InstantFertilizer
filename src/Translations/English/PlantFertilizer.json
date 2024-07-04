@@ -1,4 +1,5 @@
 {
   "InstantFertilizer_Fertilize": "Fertilize",
-  "InstantFertilizer_FertilizerRequired": "Fertilizer required"
+  "InstantFertilizer_FertilizerRequired": "Fertilizer required",
+  "InstantFertilizer_FertilizedWith": "Fertilized with:"
 }

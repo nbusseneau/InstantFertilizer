@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add config option to reduce remaining time by a percentage of total growing / respawning time when fertilizing, rather instantaneously bypass the whole remaining time.
+- Add possibility to fertilize the same plant / pickable multiple times, but not more than once with the same fertilizer.
+
 ## [0.1.1] - 2024-06-24
 
 ### Changed

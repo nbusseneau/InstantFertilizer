@@ -19,46 +19,71 @@ public static class FertilizerManager
     return hasKey;
   }
 
-  public static string GetFertilizeHoverText()
-  {
-    var availableFertilizers = Plugin.Fertilizers.Where(fertilizer => HasGlobalKey(fertilizer.RequiredGlobalKey)).Select(fertilizer => fertilizer.HoverText);
-    if (!availableFertilizers.Any()) return string.Empty;
+  private static readonly string WasFertilizedWithZDOKey = $"{Plugin.ModGUID}.WasFertilizedWith";
+  public static void SetWasFertilizedWith(Fertilizer fertilizer, ZNetView nview, bool value) => nview.GetZDO().Set($"{WasFertilizedWithZDOKey}.{fertilizer.ItemName}", value);
+  private static bool WasFertilizedWith(Fertilizer fertilizer, ZNetView nview) => nview.GetZDO().GetBool($"{WasFertilizedWithZDOKey}.{fertilizer.ItemName}");
 
-    var fertilizeHoverText = $"\n[<color=yellow><b>$KEY_Use</b></color>] $InstantFertilizer_Fertilize ({string.Join(" / ", availableFertilizers)})";
+  public static string GetFertilizeHoverText(ZNetView nview)
+  {
+    var fertilizeHoverText = string.Empty;
+
+    var wasFertilizedWith = Plugin.Fertilizers
+      .Where(fertilizer => WasFertilizedWith(fertilizer, nview))
+      .Select(fertilizer => fertilizer.ItemName);
+    if (wasFertilizedWith.Any()) fertilizeHoverText += $"\n$InstantFertilizer_FertilizedWith {string.Join(" / ", wasFertilizedWith)}";
+
+    var availableFertilizers = Plugin.Fertilizers
+      .Where(fertilizer => HasGlobalKey(fertilizer.RequiredGlobalKey) && !wasFertilizedWith.Contains(fertilizer.ItemName))
+      .Select(fertilizer => $"{fertilizer.RequiredAmount} {fertilizer.ItemName}");
+    if (availableFertilizers.Any()) fertilizeHoverText += $"\n[<color=yellow><b>$KEY_Use</b></color>] $InstantFertilizer_Fertilize ({string.Join(" / ", availableFertilizers)})";
+
     return Localization.instance.Localize(fertilizeHoverText);
   }
 
   public static bool TryFertilize(Player player, Pickable pickable)
   {
     if (!pickable.m_nview.IsValid() || !pickable.m_picked || pickable.m_enabled == 0) return false;
-    return TryFertilizeInternal(player, pickable, () =>
+    return TryFertilizeInternal(player, pickable.m_nview, () =>
     {
       pickable.m_nview.ClaimOwnership();
-      pickable.m_nview.InvokeRPC(ZNetView.Everybody, nameof(Pickable.RPC_SetPicked), false);
+      if (pickable.m_pickedTime == 0L) pickable.UpdateRespawn(); // kludge to force initialize pickedTime before fertilizing if the pickable was just created
+      DateTime pickedTime = new(pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime));
+      pickedTime -= TimeSpan.FromMinutes(pickable.m_respawnTimeMinutes * Plugin.FertilizePercentage);
+      pickable.m_nview.GetZDO().Set(ZDOVars.s_pickedTime, pickedTime.Ticks);
+      pickable.UpdateRespawn();
     });
   }
 
   public static bool TryFertilize(Player player, Plant plant)
   {
     if (!plant.m_nview.IsValid() || plant.m_status != Plant.Status.Healthy) return false;
-    return TryFertilizeInternal(player, plant, () =>
+    return TryFertilizeInternal(player, plant.m_nview, () =>
     {
       plant.m_nview.ClaimOwnership();
-      plant.Grow();
+      DateTime plantTime = new(plant.m_nview.GetZDO().GetLong(ZDOVars.s_plantTime));
+      plantTime -= TimeSpan.FromSeconds(plant.GetGrowTime() * Plugin.FertilizePercentage);
+      plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime.Ticks);
+      plant.m_updateTime -= 100f; // kludge to force SUpdate to re-run right away
+      plant.m_spawnTime -= 100f; // kludge to force Grow to be able to run right away if suitable
+      plant.SUpdate();
     });
   }
 
-  private static bool TryFertilizeInternal(Player player, Component component, Action onFertilize)
+  private static bool TryFertilizeInternal(Player player, ZNetView nview, Action onFertilize)
   {
     player.m_lastHoverInteractTime = Time.time;
-    var availableFertilizers = Plugin.Fertilizers.Where(fertilizer => HasGlobalKey(fertilizer.RequiredGlobalKey));
+    var availableFertilizers = Plugin.Fertilizers.Where(fertilizer => HasGlobalKey(fertilizer.RequiredGlobalKey) && !WasFertilizedWith(fertilizer, nview));
     if (!availableFertilizers.Any()) return false;
 
     var wasAnyFertilizerUsed = false;
     foreach (var fertilizer in availableFertilizers)
     {
       wasAnyFertilizerUsed = player.m_inventory.GetItem(fertilizer.ItemName) is { } item && player.m_inventory.CountItems(fertilizer.ItemName) >= fertilizer.RequiredAmount && player.m_inventory.RemoveItem(item, fertilizer.RequiredAmount);
-      if (wasAnyFertilizerUsed) break;
+      if (wasAnyFertilizerUsed)
+      {
+        SetWasFertilizedWith(fertilizer, nview, true);
+        break;
+      }
     }
 
     if (!wasAnyFertilizerUsed)
@@ -68,7 +93,7 @@ public static class FertilizerManager
     }
 
     onFertilize();
-    player.DoInteractAnimation(component.transform.position);
+    player.DoInteractAnimation(nview.transform.position);
     return true;
   }
 }

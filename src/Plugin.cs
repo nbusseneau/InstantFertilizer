@@ -16,7 +16,7 @@ namespace InstantFertilizer;
 [NetworkCompatibility(CompatibilityLevel.VersionCheckOnly, VersionStrictness.Minor)]
 public class Plugin : BaseUnityPlugin
 {
-  private const string ModGUID = "nbusseneau.InstantFertilizer";
+  internal const string ModGUID = "nbusseneau.InstantFertilizer";
   private const string ModName = "InstantFertilizer";
   private const string ModVersion = "0.1.1";
 
@@ -30,6 +30,9 @@ public class Plugin : BaseUnityPlugin
   private static List<Fertilizer> ParseFertilizers(string serializedFertilizers) => serializedFertilizers.Split(',').Select(Fertilizer.FromString).Where(f => f is not null).ToList();
   public static List<Fertilizer> Fertilizers { get; private set; }
 
+  private static ConfigEntry<int> s_fertilizePercentage;
+  public static float FertilizePercentage => s_fertilizePercentage.Value / 100f;
+
   public void Awake()
   {
     Logger = base.Logger;
@@ -42,6 +45,11 @@ Note that the mod is not able to determine in advance if an item or global key a
     s_fertilizers = Config.Bind("Behaviour", "Fertilizer list", s_defaultFertilizers.Join(), new ConfigDescription(fertilizersConfigDescription, tags: isAdminOnly));
     Fertilizers = ParseFertilizers(s_fertilizers.Value);
     s_fertilizers.SettingChanged += (_, _) => Fertilizers = ParseFertilizers(s_fertilizers.Value);
+    var fertilizePercentageConfigDescription = @"Reduce remaining time by this amount when fertilizing (in percentage of total growing / respawning time).
+Default value of 100%: grow / respawn instantaneously.
+A single plant / pickable can be fertilized multiple times, but not more than once with the same fertilizer.";
+    AcceptableValueRange<int> fertilizePercentageAcceptableValues = new(1, 100);
+    s_fertilizePercentage = Config.Bind("Behaviour", "Fertilize percentage", 100, new ConfigDescription(fertilizePercentageConfigDescription, fertilizePercentageAcceptableValues, tags: isAdminOnly));
     SetUpConfigWatcher();
 
     var assembly = Assembly.GetExecutingAssembly();
