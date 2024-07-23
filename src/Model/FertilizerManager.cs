@@ -40,9 +40,16 @@ public static class FertilizerManager
     return Localization.instance.Localize(fertilizeHoverText);
   }
 
+  public static bool CanFertilize(Pickable pickable)
+  {
+    if (pickable.CanBePicked() || !pickable.m_nview || !pickable.m_nview.IsValid()) return false;
+    var timeSincePicked = ZNet.instance.GetTime() - new DateTime(pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime));
+    return timeSincePicked.TotalMinutes <= pickable.m_respawnTimeMinutes;
+  }
+  public static bool CanFertilize(Plant plant) => plant.m_status == Plant.Status.Healthy && plant.m_nview && plant.m_nview.IsValid() && plant.TimeSincePlanted() <= plant.GetGrowTime();
+
   public static bool TryFertilize(Player player, Pickable pickable)
   {
-    if (!pickable.m_nview.IsValid() || !pickable.m_picked || pickable.m_enabled == 0) return false;
     return TryFertilizeInternal(player, pickable.m_nview, () =>
     {
       pickable.m_nview.ClaimOwnership();
@@ -56,7 +63,6 @@ public static class FertilizerManager
 
   public static bool TryFertilize(Player player, Plant plant)
   {
-    if (!plant.m_nview.IsValid() || plant.m_status != Plant.Status.Healthy) return false;
     return TryFertilizeInternal(player, plant.m_nview, () =>
     {
       plant.m_nview.ClaimOwnership();
