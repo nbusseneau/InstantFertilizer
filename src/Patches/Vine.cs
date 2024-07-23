@@ -23,7 +23,7 @@ public class VinePatches
           new CodeMatch(OpCodes.Ldloca_S),
           new CodeMatch(OpCodes.Call),
           new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(ZDO), nameof(ZDO.Set), [typeof(int), typeof(long)])))
-        .ThrowIfInvalid("Could not inject WasVineGrown status to child vine in Vine.Grow(...)")
+        .ThrowIfInvalid("Could not inject WasVineFertilized status to child vine in Vine.Grow(...)")
         .Advance(1)
         // load existing Vine (arg 0) and new Vine (index 0) to be consumed as arguments to the delegate
         .InsertAndAdvance(new CodeInstruction(OpCodes.Ldarg_0))
