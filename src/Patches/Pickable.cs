@@ -12,7 +12,8 @@ public class PickablePatches
   private static void PickableGetFertilizeHoverText(Pickable __instance, ref string __result)
   {
     var canFertilize = FertilizerManager.CanFertilize(__instance);
-    if (!canFertilize) return;
+    var canFertilizeVine = __instance.GetComponent<Vine>() is { } vine && FertilizerManager.CanFertilize(vine);
+    if (!canFertilize && !canFertilizeVine) return;
     __result += FertilizerManager.GetFertilizeHoverText(__instance.m_nview);
   }
 

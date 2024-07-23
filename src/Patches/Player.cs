@@ -16,6 +16,7 @@ public class PlayerPatches
     if (__instance.InAttack() || __instance.InDodge() || hold) return;
     var wasAnythingFertilized = false;
     if (go.GetComponentInParent<Plant>() is { } plant && FertilizerManager.CanFertilize(plant)) wasAnythingFertilized = FertilizerManager.TryFertilize(__instance, plant);
+    else if (go.GetComponentInParent<Vine>() is { } vine && FertilizerManager.CanFertilize(vine)) wasAnythingFertilized = FertilizerManager.TryFertilize(__instance, vine);
     else if (go.GetComponentInParent<Pickable>() is { } pickable && FertilizerManager.CanFertilize(pickable)) wasAnythingFertilized = FertilizerManager.TryFertilize(__instance, pickable);
     if (wasAnythingFertilized) __runOriginal = false;
   }
