@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Support for 0.219.13 (The Bog Witch).
 - Update Jotunn to 2.26.1.
 
 ## [0.3.0] - 2024-07-23

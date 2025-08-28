@@ -83,9 +83,10 @@ public static class FertilizerManager
       DateTime plantTime = new(plant.m_nview.GetZDO().GetLong(ZDOVars.s_plantTime));
       plantTime -= TimeSpan.FromSeconds(plant.GetGrowTime() * Plugin.FertilizePercentage);
       plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime.Ticks);
-      plant.m_updateTime -= 100f; // kludge to force SUpdate to re-run right away
-      plant.m_spawnTime -= 100f; // kludge to force Grow to be able to run right away if suitable
-      plant.SUpdate();
+      plant.m_updateTime = float.MaxValue; // kludge to force SUpdate to re-run right away
+      plant.m_spawnTime = 0f; // kludge to force Grow to be able to run right away if suitable
+      var zone = ZoneSystem.GetZone(ZNet.instance.GetReferencePosition());
+      plant.SUpdate(Time.time, zone);
     });
   }
 
@@ -113,7 +114,7 @@ public static class FertilizerManager
     }
 
     onFertilize();
-    player.DoInteractAnimation(nview.transform.position);
+    player.DoInteractAnimation(nview.gameObject);
     return true;
   }
 }
