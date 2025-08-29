@@ -63,6 +63,7 @@ public static class FertilizerManager
       var pickedTime = pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime);
       var respawnTimeSeconds = pickable.m_respawnTimeMinutes * 60 * Plugin.FertilizePercentage;
       pickedTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
+      if (pickedTime < 0L) pickedTime = 1L; // safeguard in case the world has not been alive long enough and subtracting respawn time results in negative values, using 1L instead of 0L to avoid reset on reconnect
       pickable.m_nview.GetZDO().Set(ZDOVars.s_pickedTime, pickedTime);
 
       // force update check to respawn right away if needed
@@ -90,6 +91,7 @@ public static class FertilizerManager
       // manually tweak plant time to trick the game into accelerating growth
       var respawnTimeSeconds = (plant.GetGrowTime() - plant.TimeSincePlanted()) * Plugin.FertilizePercentage;
       plantTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
+      if (plantTime < 0L) plantTime = 1L; // safeguard in case the world has not been alive long enough and subtracting respawn time results in negative values, using 1L instead of 0L to avoid reset on reconnect
       plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime);
 
       // force update check to grow right away if needed

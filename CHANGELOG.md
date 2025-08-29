@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Jotunn to 2.26.1.
 - The `Fertilize percentage` config value now applies as a percentage of the remaining time instead of the original time.
 
+### Fixed
+
+- Fix fertilizing not working and flooding logs with exceptions when used in brand new worlds due to "negative times" calculations. Note that even then, plants / pickables will only be able to grow when current world time has exceeded their default growth / respawn time.
+
 ## [0.3.0] - 2024-07-23
 
 ### Added
