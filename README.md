@@ -1,7 +1,7 @@
 # Instant Fertilizer™
 
-[Valheim](https://store.steampowered.com/app/892970/Valheim/) mod that allows to fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to grow / respawn them instantaneously.
-Configurable fertilizer list (default: **3 Ancient Seeds** or **1 Ymir Flesh**) and growing / respawning time reduction, enforceable server-side.
+[Valheim](https://store.steampowered.com/app/892970/Valheim/) mod that allows to fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to grow / respawn them faster (or even instantaneously!).
+Configurable fertilizer list (default: **3 Ancient Seeds** or **1 Ymir Flesh**) and remaining time reduction, enforceable server-side.
 Translations available.
 
 ## Video showcase
@@ -10,11 +10,11 @@ https://github.com/nbusseneau/InstantFertilizer/assets/4659919/08ef5ded-b1bb-41f
 
 ## Features
 
-- Fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to make them grow or respawn instantaneously, using items from a configurable fertilizer list.
-  - Vines can also be fertilized for instant growth, after which their pickable berries can also be fertilized, though it should be noted this is a bit finnicky and works best with fresh vines that were just grown rather than preexisting vines.
+- Fertilize plants (crops, trees) and pickables (berries, mushrooms, flowers) to make them grow or respawn faster, using items from a configurable fertilizer list.
+  - Vines can also be fertilized, after which their pickable berries can also be fertilized, though it should be noted this is a bit finnicky and works best with fresh vines that were just grown rather than preexisting vines.
 - By default, the fertilizer list allows using either **3 Ancient Seeds** (after **Eikthyr** has been defeated) or **1 Ymir Flesh** (after **The Elder** has been defeated).
-- If multiple fertilizers are in inventory, consumption priority is given based on list order: make sure to position less valuable fertilizers before more valuable ones in the list.
-- By default, grow / respawn instantaneously when fertilizing, but can also be configured to reduce remaining time instead (in percentage of total growing / respawning time). A single plant / pickable can be fertilized multiple times, but not more than once with the same fertilizer (i.e. if you have 2 fertilizers and set a sub-50% reduction, using both fertilizers will not bypass the whole remaining time).
+  - If multiple fertilizers are in inventory, consumption priority is given based on list order: make sure to position less valuable fertilizers before more valuable ones in the list.
+- By default, remaining time is reduced by 100% when fertilizing, meaning the effect is instantaneous, but this percentage can also be configured to a lower value. In this mode, a single plant / pickable can be fertilized multiple times with diminishing returns (but not more than once with the same fertilizer).
 - Translations available: English, French. New languages can be added easily ([see below for details](#translations)).
 
 ## But why?

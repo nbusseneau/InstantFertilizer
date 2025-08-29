@@ -45,9 +45,10 @@ Note that the mod is not able to determine in advance if an item or global key a
     s_fertilizers = Config.Bind("Behaviour", "Fertilizer list", s_defaultFertilizers.Join(), new ConfigDescription(fertilizersConfigDescription, tags: isAdminOnly));
     Fertilizers = ParseFertilizers(s_fertilizers.Value);
     s_fertilizers.SettingChanged += (_, _) => Fertilizers = ParseFertilizers(s_fertilizers.Value);
-    var fertilizePercentageConfigDescription = @"Reduce remaining time by this amount when fertilizing (in percentage of total growing / respawning time).
+    var fertilizePercentageConfigDescription = @"Reduce current remaining time by this percentage when fertilizing.
 Default value of 100%: grow / respawn instantaneously.
-A single plant / pickable can be fertilized multiple times, but not more than once with the same fertilizer.";
+If set to a value lower than 100%, a single plant / pickable can be fertilized multiple times with diminishing returns (but not more than once with the same fertilizer).
+For example: if set at 50%, 50% of original time remain after first fertilization (reduction of 50%), and 25% of original time remain after second fertilization (reduction of 50% again).";
     AcceptableValueRange<int> fertilizePercentageAcceptableValues = new(1, 100);
     s_fertilizePercentage = Config.Bind("Behaviour", "Fertilize percentage", 100, new ConfigDescription(fertilizePercentageConfigDescription, fertilizePercentageAcceptableValues, tags: isAdminOnly));
     SetUpConfigWatcher();

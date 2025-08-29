@@ -58,9 +58,14 @@ public static class FertilizerManager
     {
       pickable.m_nview.ClaimOwnership();
       if (pickable.m_pickedTime == 0L) pickable.UpdateRespawn(); // kludge to force initialize pickedTime before fertilizing if the pickable was just created
-      DateTime pickedTime = new(pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime));
-      pickedTime -= TimeSpan.FromMinutes(pickable.m_respawnTimeMinutes * Plugin.FertilizePercentage);
-      pickable.m_nview.GetZDO().Set(ZDOVars.s_pickedTime, pickedTime.Ticks);
+
+      // manually tweak picked time to trick the game into accelerating respawn
+      var pickedTime = pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime);
+      var respawnTimeSeconds = pickable.m_respawnTimeMinutes * 60 * Plugin.FertilizePercentage;
+      pickedTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
+      pickable.m_nview.GetZDO().Set(ZDOVars.s_pickedTime, pickedTime);
+
+      // force update check to respawn right away if needed
       pickable.UpdateRespawn();
     });
   }
@@ -80,11 +85,16 @@ public static class FertilizerManager
     return TryFertilizeInternal(player, plant.m_nview, () =>
     {
       plant.m_nview.ClaimOwnership();
-      DateTime plantTime = new(plant.m_nview.GetZDO().GetLong(ZDOVars.s_plantTime));
-      plantTime -= TimeSpan.FromSeconds(plant.GetGrowTime() * Plugin.FertilizePercentage);
-      plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime.Ticks);
-      plant.m_updateTime = float.MaxValue; // kludge to force SUpdate to re-run right away
-      plant.m_spawnTime = 0f; // kludge to force Grow to be able to run right away if suitable
+      var plantTime = plant.m_nview.GetZDO().GetLong(ZDOVars.s_plantTime);
+
+      // manually tweak plant time to trick the game into accelerating growth
+      var respawnTimeSeconds = (plant.GetGrowTime() - plant.TimeSincePlanted()) * Plugin.FertilizePercentage;
+      plantTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
+      plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime);
+
+      // force update check to grow right away if needed
+      plant.m_updateTime = float.MaxValue;
+      plant.m_spawnTime = 0f;
       var zone = ZoneSystem.GetZone(ZNet.instance.GetReferencePosition());
       plant.SUpdate(Time.time, zone);
     });

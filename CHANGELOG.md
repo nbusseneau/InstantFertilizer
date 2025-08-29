@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for 0.219.13 (The Bog Witch).
 - Update Jotunn to 2.26.1.
+- The `Fertilize percentage` config value now applies as a percentage of the remaining time instead of the original time.
 
 ## [0.3.0] - 2024-07-23
 
