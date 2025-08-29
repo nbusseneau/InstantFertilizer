@@ -38,7 +38,7 @@ It should thus work transparently with all clients, regardless of if they use th
 ### With other mods
 
 **Instant Fertilizer™** hooks onto the `Pickable`, `Vine`, and `Plant` components and should work transparently with all mods, including those that add new **plants** or **pickables**.
-In particular, **Instant Fertilizer™** is explicitly made to be compatible with [PlantEverything](https://thunderstore.io/c/valheim/p/Advize/PlantEverything/).
+In particular, **Instant Fertilizer™** is explicitly made to be compatible with [PlantEverything](https://thunderstore.io/c/valheim/p/Advize/PlantEverything/) and [Seasons](https://thunderstore.io/c/valheim/p/shudnal/Seasons/).
 Feel free to [report any issue you find](https://github.com/nbusseneau/InstantFertilizer/issues/new).
 
 ### Translations

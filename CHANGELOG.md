@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add compatibility with Seasons.
+
 ### Changed
 
 - Support for 0.219.13 (The Bog Witch).

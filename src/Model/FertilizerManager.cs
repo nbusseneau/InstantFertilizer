@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InstantFertilizer.Compatibility;
 using UnityEngine;
 
 namespace InstantFertilizer.Model;
@@ -61,7 +62,7 @@ public static class FertilizerManager
 
       // manually tweak picked time to trick the game into accelerating respawn
       var pickedTime = pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime);
-      var respawnTimeSeconds = pickable.m_respawnTimeMinutes * 60 * Plugin.FertilizePercentage;
+      var respawnTimeSeconds = GetSecondsToRespawnPickable(pickable) * Plugin.FertilizePercentage;
       pickedTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
       if (pickedTime < 0L) pickedTime = 1L; // safeguard in case the world has not been alive long enough and subtracting respawn time results in negative values, using 1L instead of 0L to avoid reset on reconnect
       pickable.m_nview.GetZDO().Set(ZDOVars.s_pickedTime, pickedTime);
@@ -89,7 +90,7 @@ public static class FertilizerManager
       var plantTime = plant.m_nview.GetZDO().GetLong(ZDOVars.s_plantTime);
 
       // manually tweak plant time to trick the game into accelerating growth
-      var respawnTimeSeconds = (plant.GetGrowTime() - plant.TimeSincePlanted()) * Plugin.FertilizePercentage;
+      var respawnTimeSeconds = GetSecondsToGrowPlant(plant) * Plugin.FertilizePercentage;
       plantTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
       if (plantTime < 0L) plantTime = 1L; // safeguard in case the world has not been alive long enough and subtracting respawn time results in negative values, using 1L instead of 0L to avoid reset on reconnect
       plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime);
@@ -128,5 +129,17 @@ public static class FertilizerManager
     onFertilize();
     player.DoInteractAnimation(nview.gameObject);
     return true;
+  }
+
+  private static double GetSecondsToRespawnPickable(Pickable pickable)
+  {
+    if (SeasonsCompatibility.IsReady) return SeasonsCompatibility.GetSecondsToRespawnPickable(pickable);
+    return pickable.m_respawnTimeMinutes * 60;
+  }
+
+  private static double GetSecondsToGrowPlant(Plant plant)
+  {
+    if (SeasonsCompatibility.IsReady) return SeasonsCompatibility.GetSecondsToGrowPlant(plant);
+    return plant.GetGrowTime() - plant.TimeSincePlanted();
   }
 }
