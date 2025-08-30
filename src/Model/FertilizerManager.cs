@@ -89,17 +89,18 @@ public static class FertilizerManager
       plant.m_nview.ClaimOwnership();
       var plantTime = plant.m_nview.GetZDO().GetLong(ZDOVars.s_plantTime);
 
-      // manually tweak plant time to trick the game into accelerating growth
+      // wow, such 100%, much instant growth, very fast
+      if (Plugin.FertilizePercentage == 1f)
+      {
+        plant.Grow();
+        return;
+      }
+
+      // otherwise, manually tweak plant time to trick the game into accelerating growth
       var respawnTimeSeconds = GetSecondsToGrowPlant(plant) * Plugin.FertilizePercentage;
       plantTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
       if (plantTime < 0L) plantTime = 1L; // safeguard in case the world has not been alive long enough and subtracting respawn time results in negative values, using 1L instead of 0L to avoid reset on reconnect
       plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime);
-
-      // force update check to grow right away if needed
-      plant.m_updateTime = float.MaxValue;
-      plant.m_spawnTime = 0f;
-      var zone = ZoneSystem.GetZone(ZNet.instance.GetReferencePosition());
-      plant.SUpdate(Time.time, zone);
     });
   }
 
