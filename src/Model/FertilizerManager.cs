@@ -61,8 +61,8 @@ public static class FertilizerManager
 
       // manually tweak picked time to trick the game into accelerating respawn
       var pickedTime = pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime);
-      var respawnTimeSeconds = GetSecondsToRespawnPickable(pickable) * Plugin.FertilizePercentage;
-      pickedTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
+      var remainingSeconds = GetRemainingSeconds(pickable) * Plugin.FertilizePercentage;
+      pickedTime -= TimeSpan.FromSeconds(remainingSeconds).Ticks;
       if (pickedTime < 0L) pickedTime = 1L; // safeguard in case the world has not been alive long enough and subtracting respawn time results in negative values, using 1L instead of 0L to avoid reset on reconnect
       pickable.m_nview.GetZDO().Set(ZDOVars.s_pickedTime, pickedTime);
 
@@ -96,8 +96,8 @@ public static class FertilizerManager
       }
 
       // otherwise, manually tweak plant time to trick the game into accelerating growth
-      var respawnTimeSeconds = GetSecondsToGrowPlant(plant) * Plugin.FertilizePercentage;
-      plantTime -= TimeSpan.FromSeconds(respawnTimeSeconds).Ticks;
+      var remainingSeconds = GetRemainingSeconds(plant) * Plugin.FertilizePercentage;
+      plantTime -= TimeSpan.FromSeconds(remainingSeconds).Ticks;
       if (plantTime < 0L) plantTime = 1L; // safeguard in case the world has not been alive long enough and subtracting respawn time results in negative values, using 1L instead of 0L to avoid reset on reconnect
       plant.m_nview.GetZDO().Set(ZDOVars.s_plantTime, plantTime);
     });
@@ -131,15 +131,12 @@ public static class FertilizerManager
     return true;
   }
 
-  private static double GetSecondsToRespawnPickable(Pickable pickable)
+  private static double GetRemainingSeconds(Pickable pickable)
   {
-    if (SeasonsCompatibility.IsReady) return SeasonsCompatibility.GetSecondsToRespawnPickable(pickable);
-    return pickable.m_respawnTimeMinutes * 60;
+    var respawnTimeSeconds = SeasonsCompatibility.IsReady ? SeasonsCompatibility.GetSecondsToRespawnPickable(pickable) : pickable.m_respawnTimeMinutes * 60;
+    var timeSincePicked = ZNet.instance.GetTime() - new DateTime(pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime));
+    return respawnTimeSeconds - timeSincePicked.TotalSeconds;
   }
 
-  private static double GetSecondsToGrowPlant(Plant plant)
-  {
-    if (SeasonsCompatibility.IsReady) return SeasonsCompatibility.GetSecondsToGrowPlant(plant);
-    return plant.GetGrowTime() - plant.TimeSincePlanted();
-  }
+  private static double GetRemainingSeconds(Plant plant) => SeasonsCompatibility.IsReady ? SeasonsCompatibility.GetSecondsToGrowPlant(plant) : plant.GetGrowTime() - plant.TimeSincePlanted();
 }

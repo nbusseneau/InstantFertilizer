@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update BepInEx to 5.4.2333.
 
+### Fixed
+
+- Fix `Fertilize percentage` still applying to original time instead of remaining time for pickables.
+
 ## [0.4.0] - 2025-08-29
 
 ### Added
