@@ -47,11 +47,10 @@ public static class FertilizerManager
   {
     if (pickable.CanBePicked() || !pickable.m_nview || !pickable.m_nview.IsValid()) return false;
     if (pickable.GetComponent<Vine>() is { } vine && !vine.CanSpawnPickable(pickable)) return false;
-    var timeSincePicked = ZNet.instance.GetTime() - new DateTime(pickable.m_nview.GetZDO().GetLong(ZDOVars.s_pickedTime));
-    return timeSincePicked.TotalMinutes <= pickable.m_respawnTimeMinutes;
+    return true;
   }
   public static bool CanFertilize(Vine vine) => !vine.IsDoneGrowing && vine.m_nview && vine.m_nview.IsValid() && !WasVineFertilized(vine) && !vine.m_pickable.CanBePicked();
-  public static bool CanFertilize(Plant plant) => plant.m_status == Plant.Status.Healthy && plant.m_nview && plant.m_nview.IsValid() && plant.TimeSincePlanted() <= plant.GetGrowTime();
+  public static bool CanFertilize(Plant plant) => plant.m_status == Plant.Status.Healthy && plant.m_nview && plant.m_nview.IsValid();
 
   public static bool TryFertilize(Player player, Pickable pickable)
   {
