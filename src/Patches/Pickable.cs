@@ -1,4 +1,3 @@
-using System;
 using HarmonyLib;
 using InstantFertilizer.Model;
 
