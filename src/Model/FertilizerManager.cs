@@ -45,7 +45,7 @@ public static class FertilizerManager
 
   public static bool CanFertilize(Pickable pickable)
   {
-    if (pickable.CanBePicked() || !pickable.m_nview || !pickable.m_nview.IsValid()) return false;
+    if (pickable.CanBePicked() || !pickable.m_nview || !pickable.m_nview.IsValid() || pickable.m_respawnTimeMinutes <= 0) return false;
     if (pickable.GetComponent<Vine>() is { } vine && !vine.CanSpawnPickable(pickable)) return false;
     return true;
   }
