@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2025-09-14
+
 ### Fixed
 
 - Fix non-respawning pickables (e.g. Surtling core stands) being fertilizable.
@@ -68,7 +70,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial version.
 
-[unreleased]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.2...HEAD
+[unreleased]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.3...HEAD
+[0.4.3]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.0...0.4.2
 [0.4.0]: https://github.com/nbusseneau/InstantFertilizer/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/nbusseneau/InstantFertilizer/compare/0.2.0...0.3.0
