@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Version>0.4.3</Version>
     <TargetFramework>net481</TargetFramework>
-    <LangVersion>12.0</LangVersion>
+    <LangVersion>14.0</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <R2ModManProfile>Dev_InstantFertilizer</R2ModManProfile>
