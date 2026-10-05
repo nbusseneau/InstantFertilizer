@@ -11,8 +11,8 @@ websiteUrl = "https://github.com/nbusseneau/InstantFertilizer"
 containsNsfwContent = false
 
 [package.dependencies]
-denikson-BepInExPack_Valheim = "5.4.2333"
-ValheimModding-Jotunn = "2.26.1"
+denikson-BepInExPack_Valheim = "5.4.2351"
+ValheimModding-Jotunn = "2.30.2"
 
 
 [build]
@@ -38,4 +38,4 @@ repository = "https://thunderstore.io"
 communities = [ "valheim", ]
 
 [publish.categories]
-valheim = [ "client-side", "server-side", "mods", "tweaks", "utility", "bog-witch-update", ]
+valheim = [ "client-side", "server-side", "mods", "tweaks", "utility", "deep-north-update", ]

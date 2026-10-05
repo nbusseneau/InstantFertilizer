@@ -47,7 +47,7 @@
 
   <!-- Packages -->
   <ItemGroup>
-    <PackageReference Include="JotunnLib" Version="2.26.1" />
+    <PackageReference Include="JotunnLib" Version="2.30.2" />
   </ItemGroup>
 
   <!-- Translations -->
