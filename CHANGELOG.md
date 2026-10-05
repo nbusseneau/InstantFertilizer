@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-05
+
 - Support for 1.0 (Deep North).
 - Update BepInEx to 5.4.2351.
 - Update Jotunn to 2.30.2.
@@ -74,7 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial version.
 
-[unreleased]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.3...HEAD
+[unreleased]: https://github.com/nbusseneau/InstantFertilizer/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.3...1.0.0
 [0.4.3]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/nbusseneau/InstantFertilizer/compare/0.4.0...0.4.2
 [0.4.0]: https://github.com/nbusseneau/InstantFertilizer/compare/0.3.0...0.4.0
